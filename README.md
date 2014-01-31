@@ -18,71 +18,19 @@ To use the JumpCloud API, you must first [create a JumpCloud account](https://co
 **TODO: Add information about getting the API credentials from the JumpCloud UI and how to set the correct auth headers**
 
 
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-dsf
-sfds
-dfsdf
-dsf
-ds
-f
-dsfsd
-
-
-
-
-
-
-
-
 ### Systems
 
+The Systems section of the JumpCloud API allows you to retrieve, delete, and modify attributes of the system.
+
+**Note: Adding of a system is only allowed via the Kickstart script. Log in into the [JumpCloud console](https://console.jumpcloud.com) for details.**
 #### Routes
 
 |Resource|Description|
 |--------|-----------|
-|[GET /api/systems](#get-apisystems)|Returns a single system record corresponding to the :id url parameter.|
-|[PUT /api/systems/:id](#put-apisystemsid)|Updates the properties of the system.|
-|[DELETE /api/systems/:id](#delete-apisystemsid)| Uninstalls the JumpCloud agent from the specified system and removes the system from the list of systems managed by JumpCloud.|
+|[GET /api/systems](#get-apisystems)| [TODO: ADD DESCRIPTION] |
+|[GET /api/systems/:id](#get-apisystemsid)| [TODO: ADD DESCRIPTION] |
+|[PUT /api/systems/:id](#put-apisystemsid)| [TODO: ADD DESCRIPTION] |
+|[DELETE /api/systems/:id](#delete-apisystemsid)| [TODO: ADD DESCRIPTION] |
 
 
 ### Tags
