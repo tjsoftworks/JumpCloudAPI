@@ -8,9 +8,9 @@ JumpCloud API
 * [Systems](#systems)
     * [the `filter` parameter](#the-filter-parameter)
 * [Tags](#tags)
-    * [the `search` parameter](#the-search-parameter)
+    * [the `search` parameter](#the-tags-search-parameter)
 * [System users](#system-users)
-    * [the `search` parameter](#the-search-parameter)
+    * [the `search` parameter](#the-system-user-search-parameter)
 
 
 ## Introduction
@@ -197,7 +197,7 @@ The Tags section of the JumpCloud API allows you to add, retrieve, delete, and m
 
 **TODO: search needs to be replaced with filter like systems has. si-mongoose-express-rest already supports it but it needs to be added to the api.**
 
-### The `search` parameter
+### The tag `search` parameter
 
 To support searching for tags there is a **`search` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
 
@@ -236,7 +236,7 @@ The System users section of the JumpCloud API allows you to add, retrieve, delet
 
 **TODO: search needs to be replaced with filter like systems has. si-mongoose-express-rest already supports it but it needs to be added to the api.**
 
-### The `search` parameter
+### The system user `search` parameter
 
 To support searching for tags there is a **`search` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
 
