@@ -10,6 +10,7 @@ JumpCloud API
 * [Tags](#tags)
     * [the `search` parameter](#the-search-parameter)
 * [System users](#system-users)
+    * [the `search` parameter](#the-search-parameter)
 
 
 ## Introduction
