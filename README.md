@@ -190,8 +190,8 @@ The Tags section of the JumpCloud API allows you to add, retrieve, delete, and m
 |GET /api/tags           | Get tags in [multi record format](#multi-record-output)|
 |POST /api/tags          | Add a new Tag and return the newly created Tag in a [single record format](#single-record-output) |
 |GET /api/tags/:name     | Get a Tag record by `id` or `name` in [single record format](#single-record-output) |
-|PUT /api/tags/:name    | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
-|DELETE /api/tags/:name | Delete a Tag record by its `id` or `name`. |
+|PUT /api/tags/:name     | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
+|DELETE /api/tags/:name  | Delete a Tag record by its `id` or `name`. |
 
 
 **TODO: search needs to be replaced with filter like systems has. si-mongoose-express-rest already supports it but it needs to be added to the api.**
@@ -206,4 +206,38 @@ To support searching for tags there is a **`search` parameter** that can only be
 
 ## System users
 
-**TODO: add routes and content**
+The System users section of the JumpCloud API allows you to add, retrieve, delete, and modify System users. **TODO: add more description**
+### Modifiable properties
+
+|System property                  |Type       |Description|Required|
+|---------------------------------|-----------|-----------|:--------:|
+|`email`                          |*string*   | TODO | **X** |
+|`username`                       |*string*   | TODO | **X** |
+|`password`                       |*string*   | TODO |  |
+|`allow_public_key`               |*boolean*  | TODO |  |
+|`passwordless_sudo`              |*boolean*  | TODO |  |
+|`sudo`                           |*boolean*  | TODO |  |
+|`public_key`                     |*string*   | TODO |  |
+|`unix_uid`                       |*integer*  | TODO |  |
+|`unix_guid`                      |*integer*  | TODO |  |
+|`tags`                           |*array*    | TODO |  |
+
+### Routes
+
+|Resource                    |Description|
+|----------------------------|-----------------------------------------------------------------------------------|
+|GET /api/search/systemusers | Get System Users in [multi record format](#multi-record-output)|
+|POST /api/systemusers       | Add a new System User and return the newly created System User in a [single record format](#single-record-output) |
+|GET /api/systemusers/:id    | Get a System User record by `id` in [single record format](#single-record-output) |
+|PUT /api/systemusers/:id    | Update a System User record by its `id` and return the modified System User record in a [single record format](#single-record-output). |
+|DELETE /api/systemusers/:id | Delete a System User record by its `id`. |
+
+
+**TODO: search needs to be replaced with filter like systems has. si-mongoose-express-rest already supports it but it needs to be added to the api.**
+
+### The `search` parameter
+
+To support searching for tags there is a **`search` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+
+
+#### `search` parameter examples
