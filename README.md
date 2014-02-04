@@ -8,7 +8,7 @@ JumpCloud API
 * [Systems](#systems)
     * [the `filter` parameter](#the-filter-parameter)
 * [Tags](#tags)
-    * [the `search` parameter](#the-tags-search-parameter)
+    * [the `search` parameter](#the-tag-search-parameter)
 * [System users](#system-users)
     * [the `search` parameter](#the-system-user-search-parameter)
 
