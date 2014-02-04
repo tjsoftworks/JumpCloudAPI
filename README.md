@@ -8,6 +8,7 @@ JumpCloud API
 * [Systems](#systems)
     * [the `filter` parameter](#the-filter-parameter)
 * [Tags](#tags)
+    * [the `search` parameter](#the-search-parameter)
 * [System users](#system-users)
 
 
@@ -120,10 +121,9 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 ### Routes
 
-|Http method |Url path                |
-|------------|-----------------------------------------------------------------------------------------------|
-|GET         | /api/systems |
-| Get systems in [multi record format](#multi-record-output) ||
+|Resource                |Description|
+|------------------------|-----------------------------------------------------------------------------------|
+|GET /api/systems        | Get systems in [multi record format](#multi-record-output)|
 |POST /api/systems       | Get systems in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter. The route WILL NOT allow you to add a new system. |
 |GET /api/systems/:id    | Get a system record by `id` in [single record format](#single-record-output) |
 |PUT /api/systems/:id    | Update a system record by its `id` and return the modified system record in [single record format](#single-record-output). |
@@ -132,7 +132,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 ### The `filter` parameter
 
-To support advanced filtering there is a **`filter` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+To support advanced filtering of systems there is a **`filter` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
 
 
 #### `filter` parameter examples
@@ -171,7 +171,38 @@ Get only Ubuntu servers with a hostname starting with "www"
 
 ## Tags
 
-**TODO: add routes and content**
+The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems and visa-versa. For example if you have system A and user A both associated to Tag A then system user A will be able to login to system A. If either the system or system user are removed from the Tag access will denied for system user A to system A.
+
+### Modifiable properties
+
+|System property                  |Type       |Description|Required|
+|---------------------------------|-----------|-----------|:--------:|
+|`name`                           |*string*   | A unique name for the Tag. | **X** |
+|`systems`                        |*array*    | An array of system ids that are associated to the Tag.|
+|`systemusers`                    |*array*    | An array of system user ids that are associated to the Tag.|
+|`regularExpressions`             |*array*    | An array of regular expressions that when matched against a systems hostname will cause the system to be associated to the Tag.|
+|`expirationTime`                 |*datetime* | A date timestamp indicating when this Tag will expire its self. When a Tag expires it will revoke any system user to system associations.|
+
+### Routes
+
+|Resource                |Description|
+|------------------------|-----------------------------------------------------------------------------------|
+|GET /api/tags           | Get tags in [multi record format](#multi-record-output)|
+|POST /api/tags          | Add a new Tag and return the newly created Tag in a [single record format](#single-record-output) |
+|GET /api/tags/:name     | Get a Tag record by `id` or `name` in [single record format](#single-record-output) |
+|PUT /api/tags/:name    | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
+|DELETE /api/tags/:name | Delete a Tag record by its `id` or `name`. |
+
+
+**TODO: search needs to be replaced with filter like systems has. si-mongoose-express-rest already supports it but it needs to be added to the api.**
+
+### The `search` parameter
+
+To support searching for tags there is a **`search` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+
+
+#### `search` parameter examples
+
 
 ## System users
 
