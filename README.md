@@ -4,34 +4,73 @@ JumpCloud API
 * [Introduction](#introduction)
 * [Authentication](#authentication)
 * [Parameters](#parameters)
+    * [the `filter` parameter](#the-filter-parameter)
 * [Data structures](#data-structures)
 * [Systems](#systems)
 * [Tags](#tags)
 * [System users](#system-users)
-### Introduction
+
+
+# Introduction
 
 The JumpCloud API is a REST API for retrieving and manipulating the systems, system users, and tags managed by JumpCloud.
 To use the JumpCloud API, you must first [create a JumpCloud account](https://console.jumpcloud.com/register/).
 
 
-### Authentication
+# Authentication
 
 **TODO: Add information about getting the API credentials from the JumpCloud UI and how to set the correct auth headers**
 
-### Parameters
+# Parameters
 
-Parameters can be passed to all GET, PUT, and POST methods and controls what data is returned from the API. There are two kinds of parameters that can be used **Common parameters** and **Filter parameters**. Common parameters can be passed as url query parameters or in the body of the POST or PUT method. Filter parameters can only be passed in the body of POST or PUT methods. When using PUT or POST parameters the format of the request body needs top match the Content-Type specified as the API supports both JSON and http form parameter content types.
+Most parameters can be passed to all GET, PUT, and POST methods and controls what data is returned from the API. Parameters can be passed as url query parameters or in the body of the POST or PUT method. To support advanced filtering there is a **`filter` parameter** that can only be passed in the body of POST or PUT methods. When using PUT or POST parameters the format of the request body needs top match the Content-Type specified. The API supports both `application/json` and `application/x-www-form-urlencoded` parameter content types when using the POST or PUT method however the `filter` parameter must be passed as Content-Type application/json.
 
-#### Common parameters
-|Parameter(s)|Description|Usage|
+
+|Parameter|Description|Usage|
 |---------|-----------------|-----|
 |`limit` `skip`| `limit` will limit the returned results and `skip` will skip results.  | ` /api/systems?limit=5&skip=1` returns records 2 - 6 . |
 |`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=name&limit=5` returns tags sorted by hostname in ascending order. `/api/systems?sort=-name&limit=5` returns systems sorted by hostname in descending order. |
-|`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` |
+|`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` will system records *excluding* the `patches` and `logins` fields. `/api/system/:id?fields=hostname displayName` will return system records *including only* the `hostname`, `displayName`, and `_id`. **NOTE: the `_id` field will always be returned.**  |
 
-#### Filter parameters
-|Parameter(s)|Description|Usage|
-|||
+
+## The `filter` parameter
+
+The `filter` parameter supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+
+### `filter` parameter examples
+
+Get all systems with a hostname start with "www" or "db".
+
+```
+{
+"filter" :
+    {
+        "or" :
+            [
+                {"hostname" : { "$regex" : "^www" }},
+                {"hostname" : {"$regex" : "^db"}}
+            ]
+    },
+"fields" : "os hostname displayName"
+}
+```
+
+Get only Ubuntu servers with a hostname starting with "www"
+
+```
+{
+"filter" :
+    {
+        "and" :
+            [
+                {"hostname" : { "$regex" : "^www" }},
+                {"os" : {"$regex" : "Ubuntu", $options: "i"}}
+            ]
+    },
+"fields" : "os hostname displayName"
+}
+```
+
 
 
 ### Data structures
