@@ -4,9 +4,9 @@ JumpCloud API
 * [Introduction](#introduction)
 * [Authentication](#authentication)
 * [Parameters](#parameters)
-    * [the `filter` parameter](#the-filter-parameter)
 * [Data structures](#data-structures)
 * [Systems](#systems)
+    * [the `filter` parameter](#the-filter-parameter)
 * [Tags](#tags)
 * [System users](#system-users)
 
@@ -23,7 +23,7 @@ To use the JumpCloud API, you must first [create a JumpCloud account](https://co
 
 ## Parameters
 
-Most parameters can be passed to all GET, PUT, and POST methods and controls what data is returned from the API. Parameters can be passed as url query parameters or in the body of the POST or PUT method. To support advanced filtering there is a **`filter` parameter** that can only be passed in the body of POST or PUT methods. When using PUT or POST parameters the format of the request body needs top match the Content-Type specified. The API supports both `application/json` and `application/x-www-form-urlencoded` parameter content types when using the POST or PUT method however the `filter` parameter must be passed as Content-Type application/json.
+Most parameters can be passed to all GET, PUT, and POST methods and controls what data is returned from the API. Parameters can be passed as url query parameters or in the body of the POST or PUT method. When using PUT or POST parameters the format of the request body needs top match the Content-Type specified. The API supports both `application/json` and `application/x-www-form-urlencoded` parameter content types when using the POST or PUT method.
 
 
 |Parameter|Description|Usage|
@@ -32,44 +32,6 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 |`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=name&limit=5` returns tags sorted by hostname in ascending order. `/api/systems?sort=-name&limit=5` returns systems sorted by hostname in descending order. |
 |`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` will system records *excluding* the `patches` and `logins` fields. `/api/system/:id?fields=hostname displayName` will return system records *including only* the `hostname`, `displayName`, and `_id`. **NOTE: the `_id` field will always be returned.**  |
 
-
-### The `filter` parameter
-
-The `filter` parameter supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
-
-#### `filter` parameter examples
-
-Get all systems with a hostname start with "www" or "db".
-
-```
-{
-"filter" :
-    {
-        "or" :
-            [
-                {"hostname" : { "$regex" : "^www" }},
-                {"hostname" : {"$regex" : "^db"}}
-            ]
-    },
-"fields" : "os hostname displayName"
-}
-```
-
-Get only Ubuntu servers with a hostname starting with "www"
-
-```
-{
-"filter" :
-    {
-        "and" :
-            [
-                {"hostname" : { "$regex" : "^www" }},
-                {"os" : {"$regex" : "Ubuntu", $options: "i"}}
-            ]
-    },
-"fields" : "os hostname displayName"
-}
-```
 
 
 ## Data structures
@@ -140,9 +102,9 @@ Example of returning multiple system records.
 
 ## Systems
 
-The Systems section of the JumpCloud API allows you to retrieve, delete, and modify systems. The vast majority of system records are *read-only* because the JumpCloud agent, running on your systems, is the source of most of the data. There are however a some properties of a system record that can be modified allowing you to control the configuration of your systems.
+The Systems section of the JumpCloud API allows you to retrieve, delete, and modify systems. The vast majority of system records properties are *read-only* because the JumpCloud agent, running on your systems, is the source of most of the data. There are however a some properties of a system record that can be modified allowing you to control the configuration of your systems.
 
-The modifiable properties of the system record are...
+### Modifiable properties
 
 |System property                  |Type       |Description|
 |---------------------------------|-----------|-----------|
@@ -154,16 +116,58 @@ The modifiable properties of the system record are...
 |`allowPublicKeyAuthentication`   |*boolean*  |`true` will enable public-key authentication and `false` will disable public-key authentication for ssh.|
 
 **Note: Adding of a system is only allowed via the Kickstart script. Log in into the [JumpCloud console](https://console.jumpcloud.com) for details.**
+
+
 ### Routes
 
-|Resource                |Description|
-|------------------------|----------------------|
-|GET /api/systems        | Get systems in [multi record format](#multi-record-output)|
+|Http method |Url path                |
+|------------|-----------------------------------------------------------------------------------------------|
+|GET         | /api/systems |
+| Get systems in [multi record format](#multi-record-output) ||
 |POST /api/systems       | Get systems in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter. The route WILL NOT allow you to add a new system. |
 |GET /api/systems/:id    | Get a system record by `id` in [single record format](#single-record-output) |
 |PUT /api/systems/:id    | Update a system record by its `id` and return the modified system record in [single record format](#single-record-output). |
 |DELETE /api/systems/:id | Delete a system record by its `id`. **NOTE: This command will cause the system to uninstall the JumpCloud agent from its self which can can take about a minute. If the system is not connected to JumpCloud the system record will simply be removed** |
 
+
+### The `filter` parameter
+
+To support advanced filtering there is a **`filter` parameter** that can only be passed in the body of the POST /api/systems route. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+
+
+#### `filter` parameter examples
+
+Get all systems with a hostname start with "www" or "db".
+
+```
+{
+"filter" :
+    {
+        "or" :
+            [
+                {"hostname" : { "$regex" : "^www" }},
+                {"hostname" : {"$regex" : "^db"}}
+            ]
+    },
+"fields" : "os hostname displayName"
+}
+```
+
+Get only Ubuntu servers with a hostname starting with "www"
+
+```
+{
+"filter" :
+    {
+        "and" :
+            [
+                {"hostname" : { "$regex" : "^www" }},
+                {"os" : {"$regex" : "Ubuntu", $options: "i"}}
+            ]
+    },
+"fields" : "os hostname displayName"
+}
+```
 
 ## Tags
 
