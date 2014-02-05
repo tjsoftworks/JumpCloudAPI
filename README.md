@@ -149,7 +149,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 |System property                  |Type       |Description|
 |---------------------------------|-----------|-----------|
-|`tags`                           |*array*    | An array of tag id's that the system belongs to. Whatever is set in this list will be the new tags for the system.|
+|`tags`                           |*array*    | An array of tag id's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the system.|
 |`displayName`                    |*string*   | A string representing the name to display in the JumpCloud for the system.|
 |`allowSshPasswordAuthentication` |*boolean*  |`true` will enable password based authentication and `false` will disable password based authentication for ssh logins.|
 |`allowSshRootLogin`              |*boolean*  |`true` will enable root user authentication and `false` will disable root user authentication ofr ssh.|
@@ -200,23 +200,25 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 **TODO: Add a search route using the filter property like systems and systemusers have. si-mongoose-express-rest already supports it but it needs to be added to the api.**
 
 
-## System users
+## System Users
 
-The System users section of the JumpCloud API allows you to add, retrieve, delete, and modify System users. **TODO: add more description**
+The System Users section of the JumpCloud API allows you to add, retrieve, delete, and modify System Users. To add a System User to JumpCloud you must provide an email address and username. The System Users email will be used to contact the new System User allowing them to be *activated*. During activation the user will prompted to set their password, public key and a MFD(multi factor device). Adding a new System User will not grant them access to servers until they're associated to a Tag and a System User can be assigned to a Tag at creation time.
+
+
 ### Modifiable properties
 
 |System property                  |Type       |Description|Required|
 |---------------------------------|-----------|-----------|:--------:|
-|`email`                          |*string*   | TODO | **X** |
-|`username`                       |*string*   | TODO | **X** |
-|`password`                       |*string*   | TODO |  |
-|`allow_public_key`               |*boolean*  | TODO |  |
-|`passwordless_sudo`              |*boolean*  | TODO |  |
-|`sudo`                           |*boolean*  | TODO |  |
-|`public_key`                     |*string*   | TODO |  |
-|`unix_uid`                       |*integer*  | TODO |  |
-|`unix_guid`                      |*integer*  | TODO |  |
-|`tags`                           |*array*    | TODO |  |
+|`email`                          |*string*   | The `email` address of the new System User. | **X** |
+|`username`                       |*string*   | The `username` of the new System User.  | **X** |
+|`password`                       |*string*   | An administrative override the System Users password. **Do not set the password when creating a new user. JumpCloud will send an activation email.**   |  |
+|`allow_public_key`               |*boolean*  | Allow this user to authenticate with public key access. |  |
+|`passwordless_sudo`              |*boolean*  | Allow this user to use sudo with no password. |  |
+|`sudo`                           |*boolean*  | Allow this user to have sudo access. On Windows this will make the user and Administrator. |  |
+|`public_key`                     |*string*   | The ssh public key for this user. |  |
+|`unix_uid`                       |*integer*  | The unix group id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
+|`unix_guid`                      |*integer*  | The unix user id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
+|`tags`                           |*array*    | An array of tag id's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the system. |  |
 
 ### Routes
 
