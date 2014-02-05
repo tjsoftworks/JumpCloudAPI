@@ -209,8 +209,8 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 
 |System property                  |Type       |Description|Required|
 |---------------------------------|-----------|-----------|:--------:|
-|`email`                          |*string*   | The `email` address of the new System User. | **X** |
-|`username`                       |*string*   | The `username` of the new System User.  | **X** |
+|`email`                          |*string*   | The email address of the new System User. | **X** |
+|`username`                       |*string*   | The username of the new System User.  | **X** |
 |`password`                       |*string*   | An administrative override the System Users password. **Do not set the password when creating a new user. JumpCloud will send an activation email.**   |  |
 |`allow_public_key`               |*boolean*  | Allow this user to authenticate with public key access. |  |
 |`passwordless_sudo`              |*boolean*  | Allow this user to use sudo with no password. |  |
@@ -223,7 +223,7 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 ### Routes
 
 |Method |Path                      |Description|
-|----------------------------------|-----------------------------------------------------------------------------------|
+|-------|--------------------------|-----------------------------------------------------------------------------------|
 |GET    |`/api/systemusers`        | Get System Users in [multi record format](#multi-record-output) |
 |POST   |`/api/search/systemusers` | Get system Users in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter.|
 |POST   |`/api/systemusers`        | Add a new System User and return the newly created System User in a [single record format](#single-record-output) |
@@ -235,3 +235,17 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 
 ## Examples
 
+### Add a new System User
+
+This examples assumes there is already a Tag named "admins" in your JumpCloud account.
+
+```
+curl -iq \
+  -d "{\"email\" : \"bob@myco.com\", \"username\" : \"bob\", \"tags\" : [\"admins\"]}" \
+  -X "POST" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Date: ${now}" \
+  -H "Authorization: [TODO: Add auth info] \
+  --url https://console.jumpcloud.com/api/systemusers
+```
