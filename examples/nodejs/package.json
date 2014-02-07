@@ -1,0 +1,12 @@
+{
+  "name": "jumpcloud-api-examples",
+  "version": "0.0.1",
+  "description": "JumpCloud API Examples",
+  "author": "dev <dev@jumpcloud.com>",
+  "private": true,
+  "dependencies": {
+    "superagent": "0.16.0",
+    "async": "0.2.10"
+  }
+
+}

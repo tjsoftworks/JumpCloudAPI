@@ -37,7 +37,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 
 ### The `filter` parameter
 
-To support advanced filtering of there is a **`filter` parameter** that can only be passed in the body of `POST /api/search/*` routes. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions.
+To support advanced filtering of there is a **`filter` parameter** that can only be passed in the body of `POST /api/search/*` routes. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions. If the `and` or `or` are not included the default behavior is to match *ALL* query expressions.
 
 
 #### `filter` parameter examples
@@ -71,6 +71,15 @@ Get only Ubuntu servers with a hostname starting with "www"
             ]
     },
 "fields" : "os hostname displayName"
+}
+```
+
+Get system users that have an email from "gmail.com"
+
+```
+{
+"filter" : [{"email" : { "$regex" : "gmail.com$"}}],
+"fields" : "email username sudo"
 }
 ```
 
@@ -249,3 +258,38 @@ curl -iq \
   -H "Authorization: [TODO: Add auth info] \
   --url https://console.jumpcloud.com/api/systemusers
 ```
+
+### Find a System User by username
+
+```
+curl -iq \
+  -d "{\"username\" : \"bob\"}" \
+  -X "POST" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Date: ${now}" \
+  -H "Authorization: [TODO: Add auth info] \
+  --url https://console.jumpcloud.com/api/search/systemusers
+```
+
+### Create a new Tag
+
+```
+curl -iq \
+  -d "{\"name\" : \"Developers\"}" \
+  -X "POST" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Date: ${now}" \
+  -H "Authorization: [TODO: Add auth info] \
+  --url https://console.jumpcloud.com/api/tags
+```
+
+### More examples
+
+Please check out the examples folder for more detailed examples.
+
+[Add System User to Tags](examples/nodejs/add-user-to-system.js)
+
+
+
