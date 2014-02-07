@@ -289,7 +289,7 @@ curl -iq \
 
 Please check out the examples folder for more detailed examples.
 
-[Add System User to Tags](examples/nodejs/add-user-to-system.js)
+[Add System User to Tags](#/examples/nodejs/add-user-to-system.js)
 
 
 
