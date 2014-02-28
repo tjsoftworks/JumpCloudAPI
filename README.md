@@ -23,7 +23,7 @@ To use the JumpCloud API, you must first [create a JumpCloud account](https://co
 
 Log into the JumpCloud console. Go to the settings dropdown (top-right) and retrieve the API key. This API key is associated to the currently logged in administrator. Other admins will have different API keys.
 
-**NOTE: Please keep this API key secret as it grants full access to your organization's data.**
+**NOTE: Please keep this API key secret, as it grants full access to your organization's data.**
 
 The API key will be passed in as a header with the header name "x-api-key".
 
@@ -33,7 +33,7 @@ For example,
 
 ### Recycling API Key
 
-In order to revoke access with the current API key just regenerate a new key. This will render all calls using the previous API key inaccessible.
+In order to revoke access with the current API key, simply regenerate a new key. This will render all calls using the previous API key inaccessible.
 
 ## Parameters
 
