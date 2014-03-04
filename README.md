@@ -114,7 +114,7 @@ curl -iq \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
-  --url https://console.jumpcloud.com/api/systems/${systemId}
+  --url https://console.jumpcloud.com/api/systems/:id
 ```
 
 
