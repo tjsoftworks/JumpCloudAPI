@@ -112,8 +112,8 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
-  --url https://console.jumpcloud.com/api/systems/${systemKey}
+  -H "x-api-key: <Admin User API Key>" \
+  --url https://console.jumpcloud.com/api/systems/${systemId}
 ```
 
 
@@ -193,7 +193,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 ## Tags
 
-The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems and visa-versa. For example if you have system A and user A both associated to Tag A then system user A will be able to login to system A. If either the system or system user are removed from the Tag access will denied for system user A to system A.
+The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems and visa-versa. For example if you have system A and user A both associated to Tag A then system user A will be able to login to system A. If either the system or system user are removed from the Tag access will be denied for system user A to system A.
 
 For more information about tags see: [How to Use Tags](http://support.jumpcloud.com/knowledgebase/articles/295858-how-to-use-tags)
 
@@ -217,9 +217,11 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 |PUT    |`/api/tags/:name`  | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
 |DELETE |`/api/tags/:name`  | Delete a Tag record by its `id` or `name`. |
 
+### Search
 
-**TODO: Add a search route using the filter property like systems and systemusers have. si-mongoose-express-rest already supports it but it needs to be added to the api.**
+Search through tags using query parameters. In the case below, search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
+      http://console.jumpcloud.com/api/tags?search[fields][]=name&search[searchTerm]=debian&limit=5
 
 ## System Users
 
@@ -267,7 +269,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
+  -H "x-api-key: <Admin User API Key>" \
   --url https://console.jumpcloud.com/api/systemusers
 ```
 
@@ -280,7 +282,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
+  -H "x-api-key: <Admin User API Key>" \
   --url https://console.jumpcloud.com/api/search/systemusers
 ```
 
@@ -293,7 +295,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
+  -H "x-api-key: <Admin User API Key>" \
   --url https://console.jumpcloud.com/api/tags
 ```
 
