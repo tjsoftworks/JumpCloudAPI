@@ -221,7 +221,7 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 
 Search through tags using query parameters. In the case below, search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
-      http://console.jumpcloud.com/api/tags?search[fields][]=name&search[searchTerm]=debian&limit=5
+      curl -g -H 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags\?search\[fields\]\[\]\=name\&search\[searchTerm\]\=debian\&limit\=5
 
 ## System Users
 
