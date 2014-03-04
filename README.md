@@ -113,7 +113,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/systems/${systemId}
 ```
 
@@ -270,7 +270,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/systemusers
 ```
 
@@ -283,7 +283,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/search/systemusers
 ```
 
@@ -296,7 +296,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/tags
 ```
 
