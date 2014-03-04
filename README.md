@@ -43,7 +43,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 |Parameter|Description|Usage|
 |---------|-----------------|-----|
 |`limit` `skip`| `limit` will limit the returned results and `skip` will skip results.  | ` /api/systems?limit=5&skip=1` returns records 2 - 6 . |
-|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=name&limit=5` returns tags sorted by hostname in ascending order. `/api/systems?sort=-name&limit=5` returns systems sorted by hostname in descending order. |
+|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=displayName&limit=5` returns tags sorted by displayName in ascending order. `/api/systems?sort=-displayName&limit=5` returns systems sorted by displayName in descending order. |
 |`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` will system records *excluding* the `patches` and `logins` fields. `/api/system/:id?fields=hostname displayName` will return system records *including only* the `hostname`, `displayName`, and `_id`. **NOTE: the `_id` field will always be returned.**  |
 
 
@@ -51,6 +51,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 
 To support advanced filtering of there is a **`filter` parameter** that can only be passed in the body of `POST /api/search/*` routes. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions. If the `and` or `or` are not included the default behavior is to match *ALL* query expressions.
 
+This endpoint is only valid for `/api/search/systems/` and `/api/search/systemusers/`
 
 #### `filter` parameter examples
 
@@ -112,8 +113,8 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
-  --url https://console.jumpcloud.com/api/systems/${systemId}
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  --url https://console.jumpcloud.com/api/systems/:id
 ```
 
 
@@ -221,7 +222,7 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 
 Search through tags using query parameters. In the case below, search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
-      http://console.jumpcloud.com/api/tags?search[fields][]=name&search[searchTerm]=debian&limit=5
+      curl -g -H 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags\?search\[fields\]\[\]\=name\&search\[searchTerm\]\=debian\&limit\=5
 
 ## System Users
 
@@ -269,7 +270,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/systemusers
 ```
 
@@ -282,7 +283,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/search/systemusers
 ```
 
@@ -295,7 +296,7 @@ curl -iq \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Date: ${now}" \
-  -H "x-api-key: <Admin User API Key>" \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
   --url https://console.jumpcloud.com/api/tags
 ```
 
