@@ -7,7 +7,7 @@ var util = require('util'),
   async = require('async'),
   request = require('superagent');
 
-var authString = "org:52e7e7ee8beacadc1300001d"; //TODO: add auth support
+var apiKey = "80bc62abdf35d503201764a50bfce25569abaf92";
 var username = null,
   tags = [],
 //baseUrl = "https://console.jumpcloud.com",
@@ -33,7 +33,7 @@ if (!username || tags.length == 0) {
 var headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Authorization': authString
+  'x-api-key': apiKey
 };
 
 //callback handler for superagent
