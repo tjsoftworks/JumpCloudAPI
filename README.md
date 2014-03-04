@@ -43,7 +43,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 |Parameter|Description|Usage|
 |---------|-----------------|-----|
 |`limit` `skip`| `limit` will limit the returned results and `skip` will skip results.  | ` /api/systems?limit=5&skip=1` returns records 2 - 6 . |
-|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=name&limit=5` returns tags sorted by hostname in ascending order. `/api/systems?sort=-name&limit=5` returns systems sorted by hostname in descending order. |
+|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=displayName&limit=5` returns tags sorted by displayName in ascending order. `/api/systems?sort=-displayName&limit=5` returns systems sorted by displayName in descending order. |
 |`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` will system records *excluding* the `patches` and `logins` fields. `/api/system/:id?fields=hostname displayName` will return system records *including only* the `hostname`, `displayName`, and `_id`. **NOTE: the `_id` field will always be returned.**  |
 
 
