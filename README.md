@@ -51,6 +51,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 
 To support advanced filtering of there is a **`filter` parameter** that can only be passed in the body of `POST /api/search/*` routes. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions. If the `and` or `or` are not included the default behavior is to match *ALL* query expressions.
 
+This endpoint is only valid for `/api/search/systems/` and `/api/search/systemusers/`
 
 #### `filter` parameter examples
 
