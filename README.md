@@ -278,7 +278,7 @@ curl -iq \
 
 ```
 curl -iq \
-  -d "{\"username\" : \"bob\"}" \
+  -d "{\"filter\": [{\"username\" : \"bob\"}]}" \
   -X "POST" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
