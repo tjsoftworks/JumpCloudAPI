@@ -29,7 +29,9 @@ The API key will be passed in as a header with the header name "x-api-key".
 
 For example,
 
-      curl --header 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags
+```
+curl -H "x-api-key: [YOUR_API_KEY_HERE]" "https://console.jumpcloud.com/api/tags"
+```
 
 ### Recycling API Key
 
@@ -43,7 +45,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 |Parameter|Description|Usage|
 |---------|-----------------|-----|
 |`limit` `skip`| `limit` will limit the returned results and `skip` will skip results.  | ` /api/systems?limit=5&skip=1` returns records 2 - 6 . |
-|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=name&limit=5` returns tags sorted by hostname in ascending order. `/api/systems?sort=-name&limit=5` returns systems sorted by hostname in descending order. |
+|`sort`         | `sort` will sort results by the specified field name.                      | `/api/systems?sort=displayName&limit=5` returns tags sorted by displayName in ascending order. `/api/systems?sort=-displayName&limit=5` returns systems sorted by displayName in descending order. |
 |`fields`       | `fields` is a space-separated string of field names to include or exclude from the result(s). | `/api/system/:id?fields=-patches -logins` will system records *excluding* the `patches` and `logins` fields. `/api/system/:id?fields=hostname displayName` will return system records *including only* the `hostname`, `displayName`, and `_id`. **NOTE: the `_id` field will always be returned.**  |
 
 
@@ -51,6 +53,7 @@ Most parameters can be passed to all GET, PUT, and POST methods and controls wha
 
 To support advanced filtering of there is a **`filter` parameter** that can only be passed in the body of `POST /api/search/*` routes. The `filter` parameter must be passed as Content-Type application/json supports advanced filtering using the [mongodb JSON query syntax](http://docs.mongodb.org/manual/reference/operator/query/). The `filter` parameter is an object with a single property, either `and` or `or` with the value of the property being an array of query expressions. This allows you to filter records using the logic of matching *ALL* or *ANY* records in the array of query expressions. If the `and` or `or` are not included the default behavior is to match *ALL* query expressions.
 
+This endpoint is only valid for `/api/search/systems/` and `/api/search/systemusers/`
 
 #### `filter` parameter examples
 
@@ -106,14 +109,13 @@ PUT methods are used for updating a record and POST methods are used for adding 
 The following example demonstrates how to update the `displayName` of the system.
 
 ```
-curl -iq \
-  -d "{\"displayName\" : \"updated-system-name-1\"}" \
-  -X "PUT" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
-  --url https://console.jumpcloud.com/api/systems/${systemKey}
+curl \
+  -d '{"displayName" : "updated-system-name-1"}' \
+  -X 'PUT' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systems/[YOUR_SYSTEM_ID_HERE]"
 ```
 
 
@@ -193,7 +195,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 ## Tags
 
-The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems and visa-versa. For example if you have system A and user A both associated to Tag A then system user A will be able to login to system A. If either the system or system user are removed from the Tag access will denied for system user A to system A.
+The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems. For example, if you have user "jsmith" and a system both associated to the same Tag, then the system user "jsmith" will be able to login to that system. If either the system or "jsmith" are removed from the Tag, "jsmith" will no longer have access to that system.
 
 For more information about tags see: [How to Use Tags](http://support.jumpcloud.com/knowledgebase/articles/295858-how-to-use-tags)
 
@@ -217,9 +219,13 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 |PUT    |`/api/tags/:name`  | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
 |DELETE |`/api/tags/:name`  | Delete a Tag record by its `id` or `name`. |
 
+### Search
 
-**TODO: Add a search route using the filter property like systems and systemusers have. si-mongoose-express-rest already supports it but it needs to be added to the api.**
+Search through tags using query parameters. The example below demonstrates how to search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
+```
+curl -g -H "x-api-key: [YOUR_API_KEY_HERE]" "https://console.jumpcloud.com/api/tags?search[fields][]=name&search[searchTerm]=debian&limit=5"
+```
 
 ## System Users
 
@@ -261,40 +267,37 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 This examples assumes there is already a Tag named "admins" in your JumpCloud account.
 
 ```
-curl -iq \
-  -d "{\"email\" : \"bob@myco.com\", \"username\" : \"bob\", \"tags\" : [\"admins\"]}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
-  --url https://console.jumpcloud.com/api/systemusers
+curl \
+  -d '{"email" : "bob@myco.com", "username" : "bob", "tags" : ["admins"]}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systemusers"
 ```
 
 ### Find a System User by username
 
 ```
-curl -iq \
-  -d "{\"username\" : \"bob\"}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
-  --url https://console.jumpcloud.com/api/search/systemusers
+curl \
+  -d '{"filter": [{"username" : "bob"}]}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/search/systemusers"
 ```
 
 ### Create a new Tag
 
 ```
-curl -iq \
-  -d "{\"name\" : \"Developers\"}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
-  -H "Authorization: [TODO: Add auth info] \
-  --url https://console.jumpcloud.com/api/tags
+curl \
+  -d '{"name" : "Developers"}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/tags"
 ```
 
 ### More examples
