@@ -194,7 +194,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 ## Tags
 
-The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems and visa-versa. For example if you have system A and user A both associated to Tag A then system user A will be able to login to system A. If either the system or system user are removed from the Tag access will be denied for system user A to system A.
+The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems. For example, if you have user "jsmith" and a system both associated to the same Tag, then the system user "jsmith" will be able to login to that system. If either the system or "jsmith" are removed from the Tag, "jsmith" will no longer have access to that system.
 
 For more information about tags see: [How to Use Tags](http://support.jumpcloud.com/knowledgebase/articles/295858-how-to-use-tags)
 
@@ -220,7 +220,7 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 
 ### Search
 
-Search through tags using query parameters. In the case below, search the **name** field of tags using the search term **debian** and limiting the results to **5**
+Search through tags using query parameters. The example below demonstrates how to search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
       curl -g -H 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags\?search\[fields\]\[\]\=name\&search\[searchTerm\]\=debian\&limit\=5
 
