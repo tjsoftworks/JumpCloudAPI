@@ -29,7 +29,9 @@ The API key will be passed in as a header with the header name "x-api-key".
 
 For example,
 
-      curl --header 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags
+```
+curl -H "x-api-key: [YOUR_API_KEY_HERE]" "https://console.jumpcloud.com/api/tags"
+```
 
 ### Recycling API Key
 
@@ -107,14 +109,13 @@ PUT methods are used for updating a record and POST methods are used for adding 
 The following example demonstrates how to update the `displayName` of the system.
 
 ```
-curl -iq \
-  -d "{\"displayName\" : \"updated-system-name-1\"}" \
-  -X "PUT" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
+curl \
+  -d '{"displayName" : "updated-system-name-1"}' \
+  -X 'PUT' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
-  --url https://console.jumpcloud.com/api/systems/:id
+  "https://console.jumpcloud.com/api/systems/[YOUR_SYSTEM_ID_HERE]"
 ```
 
 
@@ -222,7 +223,9 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 
 Search through tags using query parameters. The example below demonstrates how to search the **name** field of tags using the search term **debian** and limiting the results to **5**
 
-      curl -g -H 'x-api-key: [YOUR_API_KEY_HERE]' https://console.jumpcloud.com/api/tags\?search\[fields\]\[\]\=name\&search\[searchTerm\]\=debian\&limit\=5
+```
+curl -g -H "x-api-key: [YOUR_API_KEY_HERE]" "https://console.jumpcloud.com/api/tags?search[fields][]=name&search[searchTerm]=debian&limit=5"
+```
 
 ## System Users
 
@@ -264,40 +267,37 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 This examples assumes there is already a Tag named "admins" in your JumpCloud account.
 
 ```
-curl -iq \
-  -d "{\"email\" : \"bob@myco.com\", \"username\" : \"bob\", \"tags\" : [\"admins\"]}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
+curl \
+  -d '{"email" : "bob@myco.com", "username" : "bob", "tags" : ["admins"]}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
-  --url https://console.jumpcloud.com/api/systemusers
+  "https://console.jumpcloud.com/api/systemusers"
 ```
 
 ### Find a System User by username
 
 ```
-curl -iq \
-  -d "{\"filter\": [{\"username\" : \"bob\"}]}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
+curl \
+  -d '{"filter": [{"username" : "bob"}]}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
-  --url https://console.jumpcloud.com/api/search/systemusers
+  "https://console.jumpcloud.com/api/search/systemusers"
 ```
 
 ### Create a new Tag
 
 ```
-curl -iq \
-  -d "{\"name\" : \"Developers\"}" \
-  -X "POST" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Date: ${now}" \
+curl \
+  -d '{"name" : "Developers"}' \
+  -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
-  --url https://console.jumpcloud.com/api/tags
+  "https://console.jumpcloud.com/api/tags"
 ```
 
 ### More examples
