@@ -9,6 +9,8 @@ JumpCloud API
 * [Systems](#systems)
 * [Tags](#tags)
 * [System users](#system-users)
+* [Command Scheduler](#command-scheduler)
+* [Command Results](#command-results)
 * [Examples](#examples)
 
 
@@ -259,16 +261,15 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 |DELETE |`/api/systemusers/:id`    | Delete a System User record by its `id`. |
 
 ## Command Scheduler
-The Command Scheduler can be used to run commands across your systems/tags either immediately, at a specific time in the future, or repeatedly. You can retrieve the results by using the Command Results API.
+The Command Scheduler can be used to run commands across your systems/tags either immediately, at a specific time in the future, or repeatedly. Please note that `systems` OR `tags` is a required field. Setting both is unsupported. You can retrieve the results by using the Command Results API.
+
 ###Modifiable Properties
 |System property  |Type     |Description                        |Required|
 |-----------------|---------|-----------------------------------|:------:|
-|`name`           |*string* | The display name for the command. |**X**   |
+|`name`           |*string* | The display name for the command. ||
 |`command`        |*string* | The command to execute on the server.|**X**|
 |`user`           |*string* | The id of the JC managed user to run the command as.|**X**|
 |`systems`        |*array*  | An array of system ids to run the command on.||
-|`scheduleType`   |*string* | Used to correctly display schedule on the UI. Acceptable strings are `manual`, `one-time`, `repeated`.||
-|`scheduleRepeatType`|*string*| Used to correctly display the schedule in the UI when the `scheduleType == repeated`. Acceptable values are `minute`, `hour`, `day`, `week`, `month`, `year`.||
 |`schedule`       |*string* | A crontab that consists of: `(seconds) (minutes) (hours) (days of month) (months) (weekdays)` or `immediate`.||
 |`files`          |*array*  | An array of file ids to include with the command.||
 |`tags`           |*array*  | An array of tag ids to run the command on.||
@@ -285,6 +286,7 @@ The Command Scheduler can be used to run commands across your systems/tags eithe
 
 ## Command Results
 The Command Results section of the JumpCloud API allows you to retrieve and delete the results of commands that you ran on your system through JumpCloud. None of the properties are modifiable, but you can delete records.
+
 ### Properties
 |System property  |Type     |Description                        |Required|
 |-----------------|---------|-----------------------------------|:------:|
