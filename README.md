@@ -266,11 +266,11 @@ The Command Scheduler can be used to run commands across your systems/tags eithe
 ###Modifiable Properties
 |System property  |Type     |Description                        |Required|
 |-----------------|---------|-----------------------------------|:------:|
-|`name`           |*string* | The display name for the command. ||
+|`name`           |*string* | The display name for the command. |        |
 |`command`        |*string* | The command to execute on the server.|**X**|
 |`user`           |*string* | The id of the JC managed user to run the command as.|**X**|
 |`systems`        |*array*  | An array of system ids to run the command on.||
-|`schedule`       |*string* | A crontab that consists of: `(seconds) (minutes) (hours) (days of month) (months) (weekdays)` or `immediate`.||
+|`schedule`       |*string* | A crontab that consists of: `(seconds) (minutes) (hours) (days of month) (months) (weekdays)` or `immediate`. If you send this as an empty string, it will run immediately.||
 |`files`          |*array*  | An array of file ids to include with the command.||
 |`tags`           |*array*  | An array of tag ids to run the command on.||
 |`timeout`        |*string* | The time in seconds to allow the command to run for.||
@@ -288,19 +288,19 @@ The Command Scheduler can be used to run commands across your systems/tags eithe
 The Command Results section of the JumpCloud API allows you to retrieve and delete the results of commands that you ran on your system through JumpCloud. None of the properties are modifiable, but you can delete records.
 
 ### Properties
-|System property  |Type     |Description                        |Required|
-|-----------------|---------|-----------------------------------|:------:|
-|`command`        |*string* | The command that was executed on the system.|**X**|
-|`system`         |*string* | The id of the system the command was executed on.|**X**|
-|`organization`   |*string* | The id of the organization.       |**X**|
-|`user`       |*string* | The user the command ran as. |**X**|
-|`files`      |*array*  | An array of file ids that were included in the command.|
-|`requestTime`|*date*   | The time that the command was sent.||
-|`responseTime`|*date*  | The time that the command was completed. ||
-|`response.id`|*string*|This is the same id as the parent.||
-|`response.data.output`|*integer*|The stdout from the command that ran.||
-|`response.data.exitCode`|*string*|The exit code from the command that ran.||
-|`response.error`|*string*|The stderr output from the command that ran.||
+|System property  |Type     |Description                        |
+|-----------------|---------|-----------------------------------|
+|`command`        |*string* | The command that was executed on the system.|
+|`system`         |*string* | The id of the system the command was executed on.|
+|`organization`   |*string* | The id of the organization.       |
+|`user`           |*string* | The user the command ran as.      |
+|`files`          |*array*  | An array of file ids that were included in the command.|
+|`requestTime`    |*date*   | The time that the command was sent.|
+|`responseTime`   |*date*  | The time that the command was completed. |
+|`response.id`    |*string*|This is the same id as the parent.  |
+|`response.data.output`|*integer*|The stdout from the command that ran.|
+|`response.data.exitCode`|*string*|The exit code from the command that ran.|
+|`response.error`|*string*|The stderr output from the command that ran.|
 
 ### Routes
 |Method   |Path             |Description                                 |
