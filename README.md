@@ -6,6 +6,7 @@ JumpCloud API
 * [Parameters](#parameters)
     * [the `filter` parameter](#the-filter-parameter)
 * [Data structures](#data-structures)
+* [Triggers](#triggers)
 * [Systems](#systems)
 * [Tags](#tags)
 * [System users](#system-users)
@@ -23,7 +24,7 @@ To use the JumpCloud API, you must first [create a JumpCloud account](https://co
 
 Log into the JumpCloud console. Go to the settings dropdown (top-right) and retrieve the API key. This API key is associated to the currently logged in administrator. Other admins will have different API keys.
 
-**NOTE: Please keep this API key secret, as it grants full access to your organization's data.**
+**NOTE: Please keep this API key secret, as it grants full access to any data accessible via your JumpCloud console account.**
 
 The API key will be passed in as a header with the header name "x-api-key".
 
@@ -164,9 +165,45 @@ Example of returning multiple system records.
 
 ```
 
+## Triggers
+
+The Triggers section of the JumpCloud API allows you to use a webhook to launch a command or a workflow.  When JumpCloud receives a webhook containing the trigger name, JumpCloud will automatically execute any command(s) with that trigger name, in parallel, across all the servers defined in the saved commands.
+
+Triggers can be executed solely with a trigger name (the name you provide in the "Trigger Name:" field when you set a Command to "Run on Trigger (webhook)", or you can post a JSON object in the POST body, and all top level string or numeric objects in the JSON object will be sent to the command as environment variables.
+
+For example, posting:
+
+```
+{
+    "srcip": "192.168.1.32",
+    "attack": "Attempted Cross-Site Request Forgery"
+}
+```
+
+will generate the following environment variables for the started command:
+
+```
+srcip="192.168.1.32"
+attack="Attempted Cross-Site Request Forgery"
+```
+
+Because sub-objects and arrays are not stringified before being passed to the command, the command will see the environment variables set to "[object Object]" in these cases.
+
+More information on the use of triggers is available [here](http://support.jumpcloud.com/knowledgebase/articles/347356-how-to-use-command-triggers).
+
+### Modifiable properties
+
+None: Triggers are designed as webhooks, and as such specify an event, not a change to system state.
+
+### Routes
+
+|Method |Path             |Description|
+|-------|-----------------|-----------------------------------------------------------------------------------|
+|POST    |`/api/command/trigger/<triggerName>`     | Launch a command with trigger name `triggerName`.|
+
 ## Systems
 
-The Systems section of the JumpCloud API allows you to retrieve, delete, and modify systems. The vast majority of system records properties are *read-only* because the JumpCloud agent, running on your systems, is the source of most of the data. There are however a some properties of a system record that can be modified allowing you to control the configuration of your systems.
+The Systems section of the JumpCloud API allows you to retrieve, delete, and modify systems. The vast majority of system records properties are *read-only* because the JumpCloud agent, running on your systems, is the source of most of the data. There are, however, some properties of a system record that can be modified allowing you to control the configuration of your systems.
 
 ### Modifiable properties
 
@@ -179,7 +216,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 |`allowMultiFactorAuthentication` |*boolean*  |`true` will enable multi-factor authentication and `false` will disable multi-factor authentication for ssh.|
 |`allowPublicKeyAuthentication`   |*boolean*  |`true` will enable public-key authentication and `false` will disable public-key authentication for ssh.|
 
-**Note: Adding of a system is only allowed via the Kickstart script. Log in into the [JumpCloud console](https://console.jumpcloud.com) for details.**
+**Note: Adding of a system is only allowed via the [Kickstart script](http://support.jumpcloud.com/knowledgebase/articles/301849-other-ways-to-install-the-jumpcloud-agent).
 
 
 ### Routes
@@ -190,12 +227,11 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 |POST   |`/api/search/systems`     | Get systems in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter. The route WILL NOT allow you to add a new system. |
 |GET    |`/api/systems/:id` | Get a system record by `id` in [single record format](#single-record-output) |
 |PUT    |`/api/systems/:id` | Update a system record by its `id` and return the modified system record in [single record format](#single-record-output). |
-|DELETE |`/api/systems/:id` | Delete a system record by its `id`. **NOTE: This command will cause the system to uninstall the JumpCloud agent from its self which can can take about a minute. If the system is not connected to JumpCloud the system record will simply be removed** |
-
+|DELETE |`/api/systems/:id` | Delete a system record by its `id`. **NOTE: This command will cause the system to uninstall the JumpCloud agent from its self which can can take about a minute. If the system is not connected to JumpCloud the system record will simply be removed.** |
 
 ## Tags
 
-The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems. For example, if you have user "jsmith" and a system both associated to the same Tag, then the system user "jsmith" will be able to login to that system. If either the system or "jsmith" are removed from the Tag, "jsmith" will no longer have access to that system.
+The Tags section of the JumpCloud API allows you to add, retrieve, delete, and modify Tags. Tags are used to associate system users to systems, and to create groups of systems for easy management in the Commands tab. For example, if you have user "jsmith" and a system both associated to the same Tag, then the system user "jsmith" will be able to login to that system. If either the system or "jsmith" are removed from the Tag, "jsmith" will no longer have access to that system.
 
 For more information about tags see: [How to Use Tags](http://support.jumpcloud.com/knowledgebase/articles/295858-how-to-use-tags)
 
@@ -206,8 +242,8 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 |`name`                           |*string*   | A unique name for the Tag. | **X** |
 |`systems`                        |*array*    | An array of system ids that are associated to the Tag.|
 |`systemusers`                    |*array*    | An array of system user ids that are associated to the Tag.|
-|`regularExpressions`             |*array*    | An array of regular expressions that when matched against a systems hostname will cause the system to be associated to the Tag.|
-|`expirationTime`                 |*datetime* | A date timestamp indicating when this Tag will expire its self. When a Tag expires it will revoke any system user to system associations.|
+|`regularExpressions`             |*array*    | An array of regular expressions that when matched against a system's hostname will cause the system to be associated to the Tag.|
+|`expirationTime`                 |*datetime* | A date timestamp indicating when this Tag will expire itself. When a Tag expires it will revoke any system user to system associations.|
 
 ### Routes
 
@@ -229,7 +265,9 @@ curl -g -H "x-api-key: [YOUR_API_KEY_HERE]" "https://console.jumpcloud.com/api/t
 
 ## System Users
 
-The System Users section of the JumpCloud API allows you to add, retrieve, delete, and modify System Users. To add a System User to JumpCloud you must provide an email address and username. The System Users email will be used to contact the new System User allowing them to be *activated*. During activation the user will prompted to set their password, public key and a MFD(multi factor device). Adding a new System User will not grant them access to servers until they're associated to a Tag and a System User can be assigned to a Tag at creation time.
+The System Users section of the JumpCloud API allows you to add, retrieve, delete, and modify System Users. To add a System User to JumpCloud, you must provide an email address and username. The System Users email will be used to contact the new System User, allowing them to be *activated*. During activation, the user will prompted to set their password, an SSH public key, and to set up Google Authenticator for Multi-factor authentication.
+
+Adding a new System User will not grant them access to servers until they're associated to a Tag, and a System User can be assigned to a Tag as soon as they're created. However, they will not gain access to any servers until they have activated.
 
 
 ### Modifiable properties
@@ -240,12 +278,12 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 |`username`                       |*string*   | The username of the new System User.  | **X** |
 |`password`                       |*string*   | An administrative override the System Users password. **Do not set the password when creating a new user. JumpCloud will send an activation email.**   |  |
 |`allow_public_key`               |*boolean*  | Allow this user to authenticate with public key access. |  |
-|`passwordless_sudo`              |*boolean*  | Allow this user to use sudo with no password. |  |
-|`sudo`                           |*boolean*  | Allow this user to have sudo access. On Windows this will make the user and Administrator. |  |
+|`passwordless_sudo`              |*boolean*  | Allow this user to use sudo with no password (Linux-only). |  |
+|`sudo`                           |*boolean*  | Allow this user to have sudo access Linux (Administrator on Windows). |  |
 |`public_key`                     |*string*   | The ssh public key for this user. |  |
 |`unix_uid`                       |*integer*  | The unix group id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
 |`unix_guid`                      |*integer*  | The unix user id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
-|`tags`                           |*array*    | An array of tag id's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the system. |  |
+|`tags`                           |*array*    | An array of tag ID's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the user. |  |
 
 ### Routes
 
@@ -261,6 +299,26 @@ The System Users section of the JumpCloud API allows you to add, retrieve, delet
 
 
 ## Examples
+
+### Launch a Command via a Trigger
+
+```
+curl --silent \
+     -X 'POST' \
+     -H "x-api-key: [YOUR_API_KEY_HERE]" \
+     "https://console.jumpcloud.com/api/command/trigger/[TRIGGER_NAME_HERE]"
+```
+
+### Launch a Command via a Trigger passing a JSON object to the command
+
+```
+curl --silent \
+     -X 'POST' \
+     -H "x-api-key: [YOUR_API_KEY_HERE]" \
+     -H 'Accept: application/json' \
+     -d '{ "srcip":"192.168.2.32", "attack":"Cross Site Scripting Attempt" }' \
+     "https://console.jumpcloud.com/api/command/trigger/[TRIGGER_NAME_HERE]"
+```
 
 ### Add a new System User
 
