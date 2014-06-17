@@ -10,6 +10,8 @@ JumpCloud API
 * [Systems](#systems)
 * [Tags](#tags)
 * [System users](#system-users)
+* [Command Scheduler](#command-scheduler)
+* [Command Results](#command-results)
 * [Examples](#examples)
 
 
@@ -296,7 +298,54 @@ Adding a new System User will not grant them access to servers until they're ass
 |PUT    |`/api/systemusers/:id`    | Update a System User record by its `id` and return the modified System User record in a [single record format](#single-record-output). |
 |DELETE |`/api/systemusers/:id`    | Delete a System User record by its `id`. |
 
+## Command Scheduler
+The Command Scheduler can be used to run commands across your systems/tags either immediately, at a specific time in the future, or repeatedly. Please note that `systems` OR `tags` is a required field. Setting both is unsupported. You can retrieve the results by using the Command Results API.
 
+###Modifiable Properties
+|System property  |Type     |Description                        |Required|
+|-----------------|---------|-----------------------------------|:------:|
+|`name`           |*string* | The display name for the command. |        |
+|`command`        |*string* | The command to execute on the server.|**X**|
+|`user`           |*string* | The id of the JC managed user to run the command as.|**X**|
+|`systems`        |*array*  | An array of system ids to run the command on.||
+|`schedule`       |*string* | A crontab that consists of: `(seconds) (minutes) (hours) (days of month) (months) (weekdays)` or `immediate`. If you send this as an empty string, it will run immediately.||
+|`files`          |*array*  | An array of file ids to include with the command.||
+|`tags`           |*array*  | An array of tag ids to run the command on.||
+|`timeout`        |*string* | The time in seconds to allow the command to run for.||
+
+### Routes
+|Method   |Path             |Description                                 |
+|---------|-----------------|--------------------------------------------|
+|GET      |`/api/commands`  | Get Saved Commands in [multi record format](#multi-record-output).|
+|POST     |`/api/commands`  | Add a new Saved Command record and return the newly create Saved Command in a [single record format](#single-record-output).|
+|GET      |`/api/commands/:id` | Get a Saved Command record by `id` in [single record format](#single-record-output). 
+|PUT      |`/api/commands/:id`| Update a Saved Command record by it's `id` and return the modified Saved Command in [single record format](#single-record-output).|
+|DELETE   |`/api/commands/:id` | Delete a Saved Command record by its `id`.|
+
+## Command Results
+The Command Results section of the JumpCloud API allows you to retrieve and delete the results of commands that you ran on your system through JumpCloud. None of the properties are modifiable, but you can delete records.
+
+### Properties
+|System property  |Type     |Description                        |
+|-----------------|---------|-----------------------------------|
+|`command`        |*string* | The command that was executed on the system.|
+|`system`         |*string* | The id of the system the command was executed on.|
+|`organization`   |*string* | The id of the organization.       |
+|`user`           |*string* | The user the command ran as.      |
+|`files`          |*array*  | An array of file ids that were included in the command.|
+|`requestTime`    |*date*   | The time that the command was sent.|
+|`responseTime`   |*date*  | The time that the command was completed. |
+|`response.id`    |*string*|This is the same id as the parent.  |
+|`response.data.output`|*integer*|The stdout from the command that ran.|
+|`response.data.exitCode`|*string*|The exit code from the command that ran.|
+|`response.error`|*string*|The stderr output from the command that ran.|
+
+### Routes
+|Method   |Path             |Description                                 |
+|---------|-----------------|--------------------------------------------|
+|GET      |`/api/commandresults`  | Get Command Results in [multi record format](#multi-record-output).|
+|GET      |`/api/commandresults/:id` | Get a Command Result record by `id` in [single record format](#single-record-output). 
+|DELETE   |`/api/commandresults/:id` | Delete a Saved Result record by its `id`.|
 
 ## Examples
 
