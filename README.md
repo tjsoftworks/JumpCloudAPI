@@ -211,7 +211,7 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 
 |System property                  |Type       |Description|
 |---------------------------------|-----------|-----------|
-|`tags`                           |*array*    | An array of tag id's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the system.|
+|`tags`                           |*array*    | An array of tag id's, or names, to which the system belongs. Optional field. If not sent, tag membership will remain unchanged. If tags are sent, the system will be updated to match the specified tag list. To remove all tags, pass in an empty array as the tags property. Note: If the tags property is omitted from the initial request, the response will also omit tag information.|
 |`displayName`                    |*string*   | A string representing the name to display in the JumpCloud for the system.|
 |`allowSshPasswordAuthentication` |*boolean*  |`true` will enable password based authentication and `false` will disable password based authentication for ssh logins.|
 |`allowSshRootLogin`              |*boolean*  |`true` will enable root user authentication and `false` will disable root user authentication ofr ssh.|
@@ -285,7 +285,7 @@ Adding a new System User will not grant them access to servers until they're ass
 |`public_key`                     |*string*   | The ssh public key for this user. |  |
 |`unix_uid`                       |*integer*  | The unix group id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
 |`unix_guid`                      |*integer*  | The unix user id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
-|`tags`                           |*array*    | An array of tag ID's, or names, that the system belongs to. Whatever is set in this list will be the new tags for the user. |  |
+|`tags`                           |*array*    | An array of tag id's, or names, to which the systemuser belongs. Optional field. If not sent, tag membership will remain unchanged. If tags are sent, the systemuser will be updated to match the specified tag list. To remove all tags, pass in an empty array as the tags property. Note: If the tags property is omitted from the initial request, the response will also omit tag information. |  |
 
 ### Routes
 
