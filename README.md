@@ -283,8 +283,8 @@ Adding a new System User will not grant them access to servers until they're ass
 |`passwordless_sudo`              |*boolean*  | Allow this user to use sudo with no password (Linux-only). |  |
 |`sudo`                           |*boolean*  | Allow this user to have sudo access Linux (Administrator on Windows). |  |
 |`public_key`                     |*string*   | The ssh public key for this user. |  |
-|`unix_uid`                       |*integer*  | The unix group id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
-|`unix_guid`                      |*integer*  | The unix user id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
+|`unix_uid`                       |*integer*  | The unix user id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
+|`unix_guid`                      |*integer*  | The unix group id for this user. **Do not change this unless you really know what you're doing. JumpCloud will auto assign ids above 5000+** |  |
 |`tags`                           |*array*    | An array of tag id's, or names, to which the systemuser belongs. Optional field. If not sent, tag membership will remain unchanged. If tags are sent, the systemuser will be updated to match the specified tag list. To remove all tags, pass in an empty array as the tags property. Note: If the tags property is omitted from the initial request, the response will also omit tag information. |  |
 
 ### Routes
