@@ -291,7 +291,7 @@ Adding a new System User will not grant them access to servers until they're ass
 |Method |Path                      |Description|
 |-------|--------------------------|-----------------------------------------------------------------------------------|
 |GET    |`/api/systemusers`        | Get System Users in [multi record format](#multi-record-output) |
-|POST   |`/api/search/systemusers` | Get system Users in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter.|
+|POST   |`/api/search/systemusers` | Get System Users in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter.|
 |POST   |`/api/systemusers`        | Add a new System User and return the newly created System User in a [single record format](#single-record-output) |
 |GET    |`/api/systemusers/:id`    | Get a System User record by `id` in [single record format](#single-record-output) |
 |PUT    |`/api/systemusers/:id`    | Update a System User record by its `id` and return the modified System User record in a [single record format](#single-record-output). |
