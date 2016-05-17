@@ -124,7 +124,7 @@ curl \
 
 ### Output data
 
-All results will be formatted as [JSON](www.json.org). There are two kinds of output data single record and multi-record.
+All results will be formatted as [JSON](www.json.org). There are two main kinds of output data single record and multi-record.
 
 #### Single record output:
 
@@ -164,6 +164,36 @@ Example of returning multiple system records.
       "version": "12.04",
       "active": true,
       ...
+
+```
+
+#### System and user binding output:
+
+Example of returning a list of system bindings for specific system user:
+
+```
+{
+  "systemID1": {
+    "displayName": "System 1 Display Name"
+  },
+  "systemID2": {
+    "displayName": "System 2 Display Name"
+  },
+  ...
+
+```
+
+Example of returning a list of system user bindings for specific system:
+
+```
+{
+  "systemUserID1": {
+    "username": "systemuser1"
+  },
+  "systemUserID2": {
+    "username": "systemuser2"
+  },
+  ...
 
 ```
 
@@ -227,9 +257,9 @@ The Systems section of the JumpCloud API allows you to retrieve, delete, and mod
 |-------|-----------------|-----------------------------------------------------------------------------------|
 |GET    |`/api/systems`     | Get systems in [multi record format](#multi-record-output)|
 |POST   |`/api/search/systems`     | Get systems in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter. The route WILL NOT allow you to add a new system. |
-|GET    |`/api/systems/:id` | Get a system record by `id` in [single record format](#single-record-output) |
-|PUT    |`/api/systems/:id` | Update a system record by its `id` and return the modified system record in [single record format](#single-record-output). |
-|DELETE |`/api/systems/:id` | Delete a system record by its `id`. **NOTE: This command will cause the system to uninstall the JumpCloud agent from its self which can can take about a minute. If the system is not connected to JumpCloud the system record will simply be removed.** |
+|GET    |`/api/systems/:id` | Get a system record by `_id` in [single record format](#single-record-output) |
+|PUT    |`/api/systems/:id` | Update a system record by its `_id` and return the modified system record in [single record format](#single-record-output). |
+|DELETE |`/api/systems/:id` | Delete a system record by its `_id`. **NOTE: This command will cause the system to uninstall the JumpCloud agent from its self which can can take about a minute. If the system is not connected to JumpCloud the system record will simply be removed.** |
 
 ## Tags
 
@@ -252,9 +282,9 @@ For more information about tags see: [How to Use Tags](http://support.jumpcloud.
 |-------|-----------------|-----------|
 |GET    |`/api/tags`        | Get tags in [multi record format](#multi-record-output)|
 |POST   |`/api/tags`        | Add a new Tag and return the newly created Tag in a [single record format](#single-record-output) |
-|GET    |`/api/tags/:name`  | Get a Tag record by `id` or `name` in [single record format](#single-record-output) |
-|PUT    |`/api/tags/:name`  | Update a Tag record by its `id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
-|DELETE |`/api/tags/:name`  | Delete a Tag record by its `id` or `name`. |
+|GET    |`/api/tags/:name`  | Get a Tag record by `_id` or `name` in [single record format](#single-record-output) |
+|PUT    |`/api/tags/:name`  | Update a Tag record by its `_id` or `name` and return the modified Tag record in a [single record format](#single-record-output). |
+|DELETE |`/api/tags/:name`  | Delete a Tag record by its `_id` or `name`. |
 
 ### Search
 
@@ -293,9 +323,26 @@ Adding a new System User will not grant them access to servers until they're ass
 |GET    |`/api/systemusers`        | Get System Users in [multi record format](#multi-record-output) |
 |POST   |`/api/search/systemusers` | Get System Users in [multi record format](#multi-record-output) allowing for the passing of the `filter` parameter.|
 |POST   |`/api/systemusers`        | Add a new System User and return the newly created System User in a [single record format](#single-record-output) |
-|GET    |`/api/systemusers/:id`    | Get a System User record by `id` in [single record format](#single-record-output) |
-|PUT    |`/api/systemusers/:id`    | Update a System User record by its `id` and return the modified System User record in a [single record format](#single-record-output). |
-|DELETE |`/api/systemusers/:id`    | Delete a System User record by its `id`. |
+|GET    |`/api/systemusers/:id`    | Get a System User record by `_id` in [single record format](#single-record-output) |
+|PUT    |`/api/systemusers/:id`    | Update a System User record by its `_id` and return the modified System User record in a [single record format](#single-record-output). |
+|DELETE |`/api/systemusers/:id`    | Delete a System User record by its `_id`. |
+
+## System/User Binding
+The System/User Binding section of the JumpCloud API allows you to modify one-to-one binding relationships between a system and a system user.
+
+### Modifiable properties
+|System property  |Type     |Description                        |Required|
+|-----------------|---------|-----------------------------------|:------:|
+|`add`            |*array*  | An array of ids that are to be bound |**X**|
+|`remove`         |*array*  | An array of ids that are to be unbound |**X**|
+
+### Routes
+|Method   |Path             |Description                                 |
+|---------|-----------------|--------------------------------------------|
+|GET      |`/api/systemusers/:systemUserID/systems`  | [List system bindings for specific system user](#list-system-bindings-for-specific-system-user) in a [system and user binding format](#system-and-user-binding-output). |
+|PUT      |`/api/systemusers/:systemUserID/systems`  | [Add (or remove) system to system user](#add-or-remove-system-to-system-user) |
+|GET      |`/api/systems/:systemID/systemusers`  | [List system user bindings for specific system](#list-system-user-bindings-for-specific-system) in a [system and user binding format](#system-and-user-binding-output). |
+|PUT      |`/api/systems/:systemID/systemusers`  | [Add (or remove) system user to system](#add-or-remove-system-user-to-system) |
 
 ## Command Scheduler
 The Command Scheduler can be used to run commands across your systems/tags either immediately, at a specific time in the future, or repeatedly. Please note that `systems` OR `tags` is a required field. Setting both is unsupported. You can retrieve the results by using the Command Results API.
@@ -317,9 +364,9 @@ The Command Scheduler can be used to run commands across your systems/tags eithe
 |---------|-----------------|--------------------------------------------|
 |GET      |`/api/commands`  | Get Saved Commands in [multi record format](#multi-record-output).|
 |POST     |`/api/commands`  | Add a new Saved Command record and return the newly create Saved Command in a [single record format](#single-record-output).|
-|GET      |`/api/commands/:id` | Get a Saved Command record by `id` in [single record format](#single-record-output). 
-|PUT      |`/api/commands/:id`| Update a Saved Command record by it's `id` and return the modified Saved Command in [single record format](#single-record-output).|
-|DELETE   |`/api/commands/:id` | Delete a Saved Command record by its `id`.|
+|GET      |`/api/commands/:id` | Get a Saved Command record by `_id` in [single record format](#single-record-output). 
+|PUT      |`/api/commands/:id`| Update a Saved Command record by it's `_id` and return the modified Saved Command in [single record format](#single-record-output).|
+|DELETE   |`/api/commands/:id` | Delete a Saved Command record by its `_id`.|
 
 ## Command Results
 The Command Results section of the JumpCloud API allows you to retrieve and delete the results of commands that you ran on your system through JumpCloud. None of the properties are modifiable, but you can delete records.
@@ -343,8 +390,8 @@ The Command Results section of the JumpCloud API allows you to retrieve and dele
 |Method   |Path             |Description                                 |
 |---------|-----------------|--------------------------------------------|
 |GET      |`/api/commandresults`  | Get Command Results in [multi record format](#multi-record-output).|
-|GET      |`/api/commandresults/:id` | Get a Command Result record by `id` in [single record format](#single-record-output). 
-|DELETE   |`/api/commandresults/:id` | Delete a Saved Result record by its `id`.|
+|GET      |`/api/commandresults/:id` | Get a Command Result record by `_id` in [single record format](#single-record-output). 
+|DELETE   |`/api/commandresults/:id` | Delete a Saved Result record by its `_id`.|
 
 ## Examples
 
@@ -404,6 +451,48 @@ curl \
   -H 'Accept: application/json' \
   -H "x-api-key: [YOUR_API_KEY_HERE]" \
   "https://console.jumpcloud.com/api/tags"
+```
+
+### List system bindings for specific system user
+
+```
+curl \
+  -H 'Content-Type: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systemusers/[SYSTEM_USER_ID_HERE]/systems"
+```
+
+### Add (or remove) system to system user
+
+```
+curl \
+  -d '{ "add": ["[SYSTEM_ID_TO_ADD_HERE]"], "remove": ["[SYSTEM_ID_TO_REMOVE_HERE]"] }' \
+  -X PUT \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systemusers/[SYSTEM_USER_ID_HERE]/systems"
+```
+
+### List system user bindings for specific system
+
+```
+curl \
+  -H 'Content-Type: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systems/[SYSTEM_ID_HERE]/systemusers"
+```
+
+### Add (or remove) system user to system
+
+```
+curl \
+  -d '{ "add": ["[SYSTEM_USER_ID_TO_ADD_HERE]"], "remove": ["[SYSTEM_USER_ID_TO_REMOVE_HERE]"] }' \
+  -X PUT \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "x-api-key: [YOUR_API_KEY_HERE]" \
+  "https://console.jumpcloud.com/api/systems/[SYSTEM_ID_HERE]/systemusers"
 ```
 
 ### More examples
